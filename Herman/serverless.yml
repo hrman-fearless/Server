@@ -22,6 +22,7 @@ org: irshadi
 provider:
   name: aws
   runtime: nodejs10.x
+  region: ap-southeast-1
   environment:
     MONGO_DB: 'mongodb+srv://irshadi:error404@irshadibagasputro-cy6xm.gcp.mongodb.net/herman?retryWrites=true&w=majority'
     SECRET_TOKEN: HermanSaya
@@ -83,6 +84,16 @@ functions:
           method: post
           resp: http
           cors: true
+  testTrigger:
+    handler: handler.employeeArrived
+    events:
+      - http:
+          path: test
+          method: get
+          resp: http
+          cors: true
+  triggerEffect:
+    handler: handler.triggered
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

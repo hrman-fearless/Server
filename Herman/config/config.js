@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const rekognition = { 
-  "accessKeyId": 'AKIA5EL55NZSDEZAJMDX',
-  "secretAccessKey": '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',
+  "accessKeyId": process.env.HERMAN_REKOG_AWS_ACCESS_KEY,
+  "secretAccessKey": process.env.HERMAN_REKOG_AWS_SECRET_KEY,
   "region": "ap-southeast-1"
   }
 

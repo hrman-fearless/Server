@@ -13,6 +13,9 @@ const userSchema = new Schema({
     type : String,
     required : [true, `Please Provide Username for Your Account`],
   },
+  isManager: {
+    type: Boolean
+  },
   email: {
     type : String,
     required : [true, `Please Provide a Valid Email for Your Account`],
@@ -28,12 +31,23 @@ const userSchema = new Schema({
   birthday: {
     type: Date,
   },
-  photos: [{
-    type : String,
-  }],
-  timeLogged: [{
-    type: Date
-  }]
+  phone: {
+    type: String
+  },
+  address: {
+    type: String
+  },
+  photos: {
+    Bucket: String,
+    Name: String
+  },
+  timeLogged: [
+    {
+      date: Date,
+      arrival: String,
+      leave: String
+    }
+  ]
 }, {
   versionKey : false,
   timestamps: true

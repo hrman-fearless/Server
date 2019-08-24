@@ -26,6 +26,8 @@ provider:
   environment:
     MONGO_DB: 'mongodb+srv://irshadi:error404@irshadibagasputro-cy6xm.gcp.mongodb.net/herman?retryWrites=true&w=majority'
     SECRET_TOKEN: HermanSaya
+    HERMAN_REKOG_AWS_ACCESS_KEY: AKIA5EL55NZSJBQY4KXC????
+    HERMAN_REKOG_AWS_SECRET_KEY: 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????
 # you can overwrite defaults here
 #  stage: dev
 #  region: us-east-1
@@ -85,15 +87,18 @@ functions:
           resp: http
           cors: true
   testTrigger:
-    handler: handler.employeeArrived
+    # handler: handler.employeeArrived
+    handler: handler.test
     events:
-      - http:
-          path: test
-          method: get
-          resp: http
-          cors: true
-  triggerEffect:
-    handler: handler.triggered
+      - s3:
+          bucket: herman-photos
+          events: s3:ObjectCreated:*
+          rules:
+            # - prefix: images/
+            - suffix: .jpg
+          existing: true
+      # - cloudwatchLog: '/aws/lambda/'
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

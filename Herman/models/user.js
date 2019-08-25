@@ -7,7 +7,6 @@ const userSchema = new Schema({
   fullname:  {
     type : String,
     required : [true, `Please Fill in Your Name`],
-    // match : [/^[a-zA-Z ]*$/, `Your Name can only contain Alphabet and Space`]
   },
   title: {
     type : String,

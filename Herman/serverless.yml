@@ -62,11 +62,11 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  all:
+    handler: handler.getAll
     events: 
       - http:
-          path: test/hello
+          path: user/all
           method: get
           resp: http
           cors: true

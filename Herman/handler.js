@@ -134,9 +134,20 @@ module.exports.test = async (event, context, callback) => {
     Bucket : data.bucket.name,
     Name: data.object.key
   }
-  console.log(payload);
-  console.log('Triggered');
+  console.log(payload), '@Payload';
   const result = await AWSRekognition(payload)
   console.log(result, '@test');
   
+}
+
+module.exports.getAll = async (event, context, callback) => {
+  const result = await User.find().select('photos')
+  return {
+    statusCode: 500,
+    body: JSON.stringify(
+      {
+        message: `Error`,
+        result,
+    })
+  }
 }

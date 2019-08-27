@@ -138,6 +138,14 @@ functions:
               paramaeters:
                 paths:
                   id: true
+  Notificationss:
+    handler: handler.testNotif
+    events:
+      - http:
+          path: notif
+          method: get
+          resp: http
+          cors: true
   
 
 

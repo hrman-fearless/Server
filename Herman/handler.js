@@ -6,6 +6,7 @@ const rekognition = require('./config/config');
 const { AWSRekognition } = require('./helpers/rekognition');
 const { employeeArrive } = require('./methods/employeeArrive');
 const { employeeLeave } = require('./methods/employeeLeave');
+const { Expo } = require('expo-server-sdk')
 const EmployeeMethods = require('./methods/employee');
 
 const connectDB = mongoose.connect(process.env.MONGO_DB, {
@@ -96,4 +97,29 @@ module.exports.employeeArrived = async (event, context, callback) => {
   await employeeArrive(result);
 
   console.log("masuk @employeeArrived");
+}
+
+module.exports.testNotif = async (payload, event, context, callback) => {
+  const expo = new Expo()
+
+  const postNotifications = (data, tokens) => {
+    const messages = {
+      to: 'ExponentPushToken[DJiyg3OxxI_eUAXc96Cxyo]', //payload
+      sound: 'default',
+      title: 'You Have Arrived at the Office',
+      body: `You Arrive at: ${new Date().getHours()}:${new Date().getMinutes()}`,
+      data,
+    }
+
+    return Promise.all(
+      expo.chunkPushNotifications([messages]).map(expo.sendPushNotificationsAsync, expo)
+    )
+  }
+
+  postNotifications({ some: 'data' }, [
+    'ExponentPushToken[DJiyg3OxxI_eUAXc96Cxyo]',
+  ])
+    .then(() => console.log('success!'))
+    .catch(err => console.log('ERR', err))
+
 }

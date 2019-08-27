@@ -2,16 +2,45 @@
 const mongoose = require('mongoose');
 const querystring = require('querystring');
 const rekognition = require('./config/config');
+
 const { AWSRekognition } = require('./helpers/rekognition');
-// const { compareHash } = require('./helpers/bcrypt');
-const { sign } = require('./helpers/jwt');
+const { employeeArrive } = require('./methods/employeeArrive');
+const { employeeLeave } = require('./methods/employeeLeave');
+const EmployeeMethods = require('./methods/employee');
+
 const connectDB = mongoose.connect(process.env.MONGO_DB, {
   useNewUrlParser: true
 }, function(err) {
   if (err) console.log(err);
 });
+
 mongoose.set('useCreateIndex', true)
 const User = require('./models/user');
+
+
+module.exports.employeeFindAll = async (event, context, callback) => {
+  const response = await EmployeeMethods.findAll();
+  return response
+}
+
+module.exports.employeeFindById = async (event, context, callback) => {
+  const pathParam = event.pathParameters;
+  const response = await EmployeeMethods.findById(pathParam.id);
+  return response;
+}
+
+module.exports.employeeSignIn = async (event, context, callback) => {
+  const data = querystring.parse(event.body);
+  // const data = JSON.parse(event.body);
+  const response = await EmployeeMethods.signIn({email: data.email, password: data.password});
+  return response
+}
+
+module.exports.betaRegister = async (event, context, callback) => {
+  const data = JSON.parse(event.body);
+  const response = await EmployeeMethods.register(data);
+  return response;
+}
 
 module.exports.createUser = async (event, context, callback) => {
   const newUser = querystring.parse(event.body);
@@ -41,113 +70,30 @@ module.exports.createUser = async (event, context, callback) => {
   }
 }
 
-// module.exports.signIn = async (event, context, callback) => {
-//   const returningUser = querystring.parse(event.body);
-//   try {
-//     const found = await User.findOne({
-//       email : returningUser.email
-//     })
-//     if (found) {
-//       if (compareHash(returningUser.password, found.password)) {
-//         const token = sign({
-//           id: found._id,
-//           email : found.email,
-//           name: found.name,
-//           title: found.title
-//         }, process.env.SECRET_TOKEN);
-//         return ({
-//           statusCode: 200,
-//           body: JSON.stringify(
-//             {
-//               token
-//             }
-//           )
-//         })
-//       } else {
-//         return ({
-//         status : 401,
-//           message : 'Invalid Username or Password'
-//         })
-//       }
-//     } else {
-//       return ({
-//         status : 401,
-//         message : 'Invalid Username or Password'
-//       })
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     return {
-//       statusCode: 500,
-//       body: JSON.stringify(
-//         {
-//           message: `Error`,
-//           error,
-//         }
-//       )
-//     }
-//   }
-// }
-
-module.exports.employeeArrived = async (payload, event, context, callback) =>  {
-  console.log('Start Here');
-  console.log(payload);
-
-  // const params = {
-  //   SimilarityThreshold: 70, 
-  //   SourceImage: {
-  //    S3Object: {
-  //       Bucket: imageURL.Bucket, 
-  //       Name: imageURL.Name
-  //     }
-  //   }, 
-  //   TargetImage: {
-  //    S3Object: {
-  //       Bucket: "herman-photos", 
-  //       Name: "yuda2.jpg"
-  //     }
-  //   }
-  // }
-
-  // const result = await new Promise ((resolve, reject) => {
-  //   rekognition.compareFaces(params, function(err, data) {
-  //     if (err) reject(err)
-  //     else {
-  //       resolve(data)
-  //     }
-  //   })
-  // })
-  // return {
-  //   statusCode: 500,
-  //   body: JSON.stringify(
-  //     {
-  //       message: `Hasil`,
-  //       result,
-  //     }
-  //   )
-  // }
+module.exports.getWeekly = async (event, context, callback) => {
+  const response = await EmployeeMethods.getWeekly();
+  return response;
 }
 
-module.exports.test = async (event, context, callback) => {
+module.exports.getDaily = async (event, context, callback) => {
+  const response = await EmployeeMethods.getDaily();
+  return response;
+}
+
+module.exports.employeeLeave = async (event, context, callback) => {
+  const pathParam = event.pathParameters;
+  const response = await employeeLeave(pathParam.id);
+  return response;
+}
+
+module.exports.employeeArrived = async (event, context, callback) => {
   const data = event.Records[0].s3
   const payload = {
     Bucket : data.bucket.name,
     Name: data.object.key
   }
-  console.log(payload), '@Payload';
   const result = await AWSRekognition(payload)
-  console.log(result, '@test');
-  
-}
+  await employeeArrive(result);
 
-module.exports.getAll = async (event, context, callback) => {
-  const result = await User.find().select('photos')
-  return {
-    statusCode: 500,
-    body: JSON.stringify(
-      {
-        message: `Error`,
-        result,
-    })
-  }
+  console.log("masuk @employeeArrived");
 }

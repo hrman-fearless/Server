@@ -12,6 +12,10 @@ const userSchema = new Schema({
     type : String,
     required : [true, `Please Provide Username for Your Account`],
   },
+  jobDesc: {
+    type: String,
+    required: [true, `Please Provide Job Description for Your Account`]
+  },
   isManager: {
     type: Boolean
   },
@@ -42,9 +46,8 @@ const userSchema = new Schema({
   },
   timeLogged: [
     {
-      date: Date,
-      arrival: String,
-      leave: String
+      arrival: Date,
+      leave: Date
     }
   ]
 }, {
@@ -59,6 +62,11 @@ userSchema.pre('save', function(next) {
 
 userSchema.plugin(uniqueValidator, { message: `Someone Already Used {VALUE} as their {PATH}` });
 
-let User = mongoose.model('user', userSchema)
+let User;
+try {
+  User = mongoose.model('user')
+} catch (error) {
+  User = mongoose.model('user', userSchema)
+}
 
 module.exports = User

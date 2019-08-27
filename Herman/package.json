@@ -17,6 +17,8 @@
     "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
+    "nyc": "^14.1.1",
+    "serverless-mocha-plugin": "^1.11.0",
     "serverless-offline": "^5.10.1"
   }
 }

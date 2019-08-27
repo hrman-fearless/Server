@@ -62,33 +62,45 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  all:
-    handler: handler.getAll
-    events: 
-      - http:
-          path: user/all
-          method: get
-          resp: http
-          cors: true
-  createUser:
-    handler: handler.createUser
+  employeeFindAll:
+    handler: handler.employeeFindAll
     events:
       - http:
           path: user
-          method: post
+          method: get
           resp: http
           cors: true
-  signIn:
-    handler: handler.signIn
+  employeeFindById:
+    handler: handler.employeeFindById
+    events:
+      - http:
+          path: user/{id}
+          method: get
+          resp: http
+          cors: true
+          request:
+            paramaeters:
+              paths:
+                id: true
+  employeeSignIn:
+    handler: handler.employeeSignIn
     events:
       - http:
           path: user/sign-in
           method: post
           resp: http
           cors: true
-  testTrigger:
-    # handler: handler.employeeArrived
-    handler: handler.test
+  employeeRegister:
+    handler: handler.betaRegister
+    events:
+      - http:
+          path: user
+          method: post
+          resp: http
+          cors: true
+  
+  employeeArrived:
+    handler: handler.employeeArrived
     events:
       - s3:
           bucket: herman-photos
@@ -98,6 +110,36 @@ functions:
             - suffix: .jpg
           existing: true
       # - cloudwatchLog: '/aws/lambda/'
+  getDaily:
+      handler: handler.getDaily
+      events:
+        - http:
+            path: user/get-daily
+            method: get
+            resp: http
+            cors: true
+  getWeekly:
+      handler: handler.getWeekly
+      events:
+        - http:
+            path: user/get-weekly
+            method: get
+            resp: http
+            cors: true
+  employeeLeave:
+      handler: handler.employeeLeave
+      events:
+        - http:
+            path: user/{id}
+            method: patch
+            resp: http
+            cors: true
+            request:
+              paramaeters:
+                paths:
+                  id: true
+  
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -152,3 +194,4 @@ functions:
 #       Value: "Some output value"
 plugins:
   - serverless-offline
+  - serverless-mocha-plugin

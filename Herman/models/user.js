@@ -49,7 +49,10 @@ const userSchema = new Schema({
       arrival: Date,
       leave: Date
     }
-  ]
+  ],
+  deviceID: {
+    type: String
+  }
 }, {
   versionKey : false,
   timestamps: true

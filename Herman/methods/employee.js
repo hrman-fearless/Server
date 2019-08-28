@@ -39,17 +39,27 @@ class EmployeeMethods{
       .then((user) => {
         if(user){
           if(compareHash(data.password, user.password)){
+            
             const payload = {
               id: user._id,
               email : user.email,
               name: user.fullname,
               title: user.title
             }
-
+            
             const token = sign(payload, process.env.SECRET_TOKEN);
 
-            return { statusCode: 200, body: JSON.stringify({id: user._id, token}) }
+            return User.findOneAndUpdate({_id: user._id}, {deviceID: data.deviceID})
+              .then((user) => {
+                return { statusCode: 200, body: JSON.stringify({id: user._id, token}) }
+              })
+              .catch((err) => {
+                return { statusCode: 500, body: JSON.stringify(err)};
+              })
+
+            
           }else{
+            return { statusCode: 401, body: JSON.stringify({message: 'Email or Password is invalid'}) };
           }
         }else{
           return { statusCode: 401, body: JSON.stringify({message: 'Email or Password is invalid'}) };

@@ -30,9 +30,9 @@ module.exports.employeeFindById = async (event, context, callback) => {
 }
 
 module.exports.employeeSignIn = async (event, context, callback) => {
-  const data = querystring.parse(event.body);
-  // const data = JSON.parse(event.body);
-  const response = await EmployeeMethods.signIn({email: data.email, password: data.password});
+  // const data = querystring.parse(event.body);
+  const data = JSON.parse(event.body);
+  const response = await EmployeeMethods.signIn({email: data.email, password: data.password, deviceID: data.deviceID});
   return response
 }
 

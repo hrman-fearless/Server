@@ -21,7 +21,7 @@ function employeeArrive(result){
 
           if(exist !== true){
             user.timeLogged.push({arrival: result.timestamp});
-            return User.findByIdAndUpdate(result._id, {timeLogged: user.timeLogged});
+            return User.findByIdAndUpdate(result._id, {timeLogged: user.timeLogged}, {new: true});
           }else{
             return null;
           }
@@ -31,11 +31,11 @@ function employeeArrive(result){
     })
     .then((user) => {
       if(user){
-        console.log("SUCCEED", user);
+        return user;
       }
     })
     .catch((err) => {
-      console.log(err);
+      return { statusCode: 500, body: JSON.stringify(err) }
     })
 }
 

@@ -2,12 +2,13 @@
 const mongoose = require('mongoose');
 const querystring = require('querystring');
 const rekognition = require('./config/config');
+const { Expo } = require('expo-server-sdk');
 
 const { AWSRekognition } = require('./helpers/rekognition');
 const { employeeArrive } = require('./methods/employeeArrive');
 const { employeeLeave } = require('./methods/employeeLeave');
-const { Expo } = require('expo-server-sdk')
 const EmployeeMethods = require('./methods/employee');
+const { pushNotif } =require('./methods/pushNotif');
 
 const connectDB = mongoose.connect(process.env.MONGO_DB, {
   useNewUrlParser: true
@@ -94,20 +95,21 @@ module.exports.employeeArrived = async (event, context, callback) => {
     Name: data.object.key
   }
   const result = await AWSRekognition(payload)
-  await employeeArrive(result);
-
-  console.log("masuk @employeeArrived");
+  const user = await employeeArrive(result);
+  await pushNotif(user);
 }
 
 module.exports.testNotif = async (payload, event, context, callback) => {
   const expo = new Expo()
-
   const postNotifications = (data, tokens) => {
+    var plus7time = new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"});
+    plus7time = new Date(plus7time);
+
     const messages = {
-      to: 'ExponentPushToken[DJiyg3OxxI_eUAXc96Cxyo]', //payload
+      to: tokens, //payload
       sound: 'default',
       title: 'You Have Arrived at the Office',
-      body: `You Arrive at: ${new Date().getHours()}:${new Date().getMinutes()}`,
+      body: `You Arrive at: ${plus7time.getHours()}:${(plus7time.getMinutes() < 10) ? '0' + plus7time.getMinutes() : plus7time.getMinutes()}`,
       data,
     }
 
@@ -115,11 +117,12 @@ module.exports.testNotif = async (payload, event, context, callback) => {
       expo.chunkPushNotifications([messages]).map(expo.sendPushNotificationsAsync, expo)
     )
   }
-
-  postNotifications({ some: 'data' }, [
-    'ExponentPushToken[DJiyg3OxxI_eUAXc96Cxyo]',
-  ])
-    .then(() => console.log('success!'))
-    .catch(err => console.log('ERR', err))
+  try {
+    await postNotifications({ some: 'data' }, [
+      'ExponentPushToken[DJiyg3OxxI_eUAXc96Cxyo]',
+    ])
+  } catch (error) {
+    console.log(error, 'Error');
+  }
 
 }

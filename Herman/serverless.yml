@@ -22,7 +22,7 @@ org: irshadi
 provider:
   name: aws
   runtime: nodejs10.x
-  region: ap-southeast-1
+  region: us-east-1
   environment:
     MONGO_DB: 'mongodb+srv://irshadi:error404@irshadibagasputro-cy6xm.gcp.mongodb.net/herman?retryWrites=true&w=majority'
     SECRET_TOKEN: HermanSaya
@@ -91,7 +91,7 @@ functions:
           resp: http
           cors: true
   employeeRegister:
-    handler: handler.betaRegister
+    handler: handler.employeeRegister
     events:
       - http:
           path: user
@@ -102,7 +102,7 @@ functions:
     handler: handler.employeeArrived
     events:
       - s3:
-          bucket: herman-photos
+          bucket: serverlessrepo-serverless-s3-uploader-s3bucket-dc9v9zgujb46
           events: s3:ObjectCreated:*
           rules:
             # - prefix: images/
@@ -137,14 +137,6 @@ functions:
               paramaeters:
                 paths:
                   id: true
-  Notificationss:
-    handler: handler.testNotif
-    events:
-      - http:
-          path: notif
-          method: get
-          resp: http
-          cors: true
   
 
 

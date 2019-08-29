@@ -12,20 +12,20 @@ function employeeLeave(id){
             user.timeLogged[user.timeLogged.length - 1].leave = new Date();
             return User.findByIdAndUpdate(id, {timeLogged: user.timeLogged});
           }else{
-            return { statusCode: 400, body: JSON.stringify({message: "Employee is not yet record as arrive today"}) }
+            throw { statusCode: 400, body: JSON.stringify({message: "Employee is not yet record as arrive today"}) }
           }
         }else{
-          return { statusCode: 400, body: JSON.stringify({message: "Employee is not yet record as arrive today"}) }
+          throw { statusCode: 400, body: JSON.stringify({message: "Employee is not yet record as arrive today"}) }
         }   
       }else{
-        return { statusCode: 404, body: JSON.stringify({message: "Employee not found"}) }
+        throw { statusCode: 404, body: JSON.stringify({message: "Employee not found"}) }
       }
     })
     .then((user) => {
       return { statusCode: 200, body: JSON.stringify(user) }
     })
     .catch((err) => {
-      return { statusCode: 500, body: JSON.stringify(err) }
+      return { statusCode: err.statusCode || 500, body: err.body || "Internal Server Error" }
     });
 }
 

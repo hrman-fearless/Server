@@ -36,8 +36,8 @@ class EmployeeMethods{
 
   static signIn(data){
     return User.findOne({email: data.email})
-      .then((user) => {
-        if(user){
+    .then((user) => {
+      if(user){
           if(compareHash(data.password, user.password)){
             
             const payload = {
@@ -52,21 +52,18 @@ class EmployeeMethods{
             return User.findOneAndUpdate({_id: user._id}, {deviceID: data.deviceID})
               .then((user) => {
                 return { statusCode: 200, body: JSON.stringify({id: user._id, token}) }
-              })
-              .catch((err) => {
-                return { statusCode: 500, body: JSON.stringify(err)};
-              })
+              });
 
             
           }else{
-            return { statusCode: 401, body: JSON.stringify({message: 'Email or Password is invalid'}) };
+            throw { statusCode: 401, body: JSON.stringify({message: 'Email or Password is invalid'}) };
           }
         }else{
-          return { statusCode: 401, body: JSON.stringify({message: 'Email or Password is invalid'}) };
+          throw { statusCode: 401, body: JSON.stringify({message: 'Email or Password is invalid'}) };
         }
       })
       .catch((err) => {
-        return { statusCode: 500, body: JSON.stringify(err)};
+        return { statusCode: err.statusCode || 500, body: err.body};
       })
   }
 

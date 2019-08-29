@@ -13,7 +13,6 @@ module.exports.pushNotif = async (user) => {
       body: `You Arrive at: ${plus7time.getHours()}:${(plus7time.getMinutes() < 10) ? '0' + plus7time.getMinutes() : plus7time.getMinutes()}`,
       data,
     }
-    console.log("masuk");
     return Promise.all(
       expo.chunkPushNotifications([messages]).map(expo.sendPushNotificationsAsync, expo)
     )

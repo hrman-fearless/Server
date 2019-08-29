@@ -12,9 +12,10 @@ describe('employeeLeave', () => {
     done();
   });
 
-  it('implement tests here', () => {
+  it('should response without an error', () => {
     return wrapped.run({pathParameters: {id: '5d63b7f31ee37200084666e6'}}).then((response) => {
       expect(response).to.haveOwnProperty('statusCode');
+      expect(response.statusCode).to.equal(400);
       expect(response).to.haveOwnProperty('body');
     });
   });

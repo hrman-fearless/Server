@@ -12,10 +12,36 @@ describe('employeeSignIn', () => {
     done();
   });
 
-  it('implement tests here', () => {
-    return wrapped.run({body: {email: 'ibe@mail.com', password: 'qwerqwer'}}).then((response) => {
+  it('should response without an error', () => {
+    return wrapped.run({ body: {email: 'ibe@mail.com', password: 'qwerqwer', deviceID: 'ExponentPushToken[DJiyg3OxxI_eUAXc96Cxyo]'} }).then((response) => {
       expect(response).to.haveOwnProperty('statusCode');
+      expect(response.statusCode).to.equal(200);
       expect(response).to.haveOwnProperty('body');
     });
   });
+
+  it('should response with an error', () => {
+    return wrapped.run({ body: {email: 'ibe@mail.com', password: 'asal', deviceID: 'ExponentPushToken[DJiyg3OxxI_eUAXc96Cxyo]'} }).then((response) => {
+      expect(response).to.haveOwnProperty('statusCode');
+      expect(response.statusCode).to.equal(401);
+      expect(response).to.haveOwnProperty('body');
+    });
+  });
+
+  it('should response with an error', () => {
+    return wrapped.run({ body: {email: 'asal', password: 'qwerqwer', deviceID: 'ExponentPushToken[DJiyg3OxxI_eUAXc96Cxyo]'} }).then((response) => {
+      expect(response).to.haveOwnProperty('statusCode');
+      expect(response.statusCode).to.equal(401);
+      expect(response).to.haveOwnProperty('body');
+    });
+  });
+
+  it('should response with an error', () => {
+    return wrapped.run({ body: { deviceID: 'ExponentPushToken[DJiyg3OxxI_eUAXc96Cxyo]'} }).then((response) => {
+      expect(response).to.haveOwnProperty('statusCode');
+      expect(response.statusCode).to.equal(401);
+      expect(response).to.haveOwnProperty('body');
+    });
+  });
+
 });

@@ -1,10 +1,9 @@
 {
   "name": "Herman",
   "version": "1.0.0",
-  "description": "",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nyc -x '**/employeeArrive.js' -x '**/rekognition.js' -x '**/pushNotif.js' sls invoke test --exit"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +20,9 @@
     "nyc": "^14.1.1",
     "serverless-mocha-plugin": "^1.11.0",
     "serverless-offline": "^5.10.1"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "description": ""
 }

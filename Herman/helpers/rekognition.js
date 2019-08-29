@@ -8,6 +8,9 @@ async function AWSRekognition(payload) {
     for (let x = 0; x < recognize.length; x++) {
       let dataPerson = recognize[x]
       let personPhoto = recognize[x].photos
+      
+      console.log(payload);
+      console.log(personPhoto);
 
       const params = {
         SimilarityThreshold: 90, 

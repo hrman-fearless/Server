@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { Expo } = require('expo-server-sdk');
 
 

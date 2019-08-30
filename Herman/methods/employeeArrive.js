@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const User = require('../models/user');
 
 function employeeArrive(result){

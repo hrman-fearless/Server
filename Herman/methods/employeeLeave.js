@@ -6,8 +6,11 @@ function employeeLeave(id){
 
   return User.findById(id)
     .then((user) => {
+      /* istanbul ignore else */
       if(user){
+        /* istanbul ignore else */
         if(user.timeLogged.length !== 0){
+          /* istanbul ignore if */
           if(user.timeLogged[user.timeLogged.length - 1].arrival && user.timeLogged[user.timeLogged.length - 1].leave === undefined){
             user.timeLogged[user.timeLogged.length - 1].leave = new Date();
             return User.findByIdAndUpdate(id, {timeLogged: user.timeLogged});
@@ -21,7 +24,7 @@ function employeeLeave(id){
         throw { statusCode: 404, body: JSON.stringify({message: "Employee not found"}) }
       }
     })
-    .then((user) => {
+    .then((user) => { /* istanbul ignore next */
       return { statusCode: 200, body: JSON.stringify(user) }
     })
     .catch((err) => {

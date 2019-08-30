@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "handler.js",
   "scripts": {
-    "test": "nyc -x '**/employeeArrive.js' -x '**/rekognition.js' -x '**/pushNotif.js' sls invoke test --exit"
+    "test": "nyc sls invoke test --exit"
   },
   "keywords": [],
   "author": "",

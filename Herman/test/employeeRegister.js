@@ -8,7 +8,7 @@ const mochaPlugin = require('serverless-mocha-plugin');
 const expect = mochaPlugin.chai.expect;
 let wrapped = mochaPlugin.getWrapper('employeeRegister', '/handler.js', 'employeeRegister');
 
-describe('employeeRegister', () => {
+describe('employeeRegister (succeed)', () => {
   before((done) => {
     done();
   });
@@ -22,6 +22,13 @@ describe('employeeRegister', () => {
         await User.findOneAndDelete({email: 'foo@bar.com'});
       });
     });
+  });
+
+});
+
+describe('employeeRegister (failed)', () => {
+  before((done) => {
+    done();
   });
 
   it('should response with an error', () => {

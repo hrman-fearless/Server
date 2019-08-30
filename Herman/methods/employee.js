@@ -9,7 +9,7 @@ class EmployeeMethods{
       .then((users) => {
         return { statusCode: 200, body: JSON.stringify({data: users}) };
       })
-      .catch((err) => {
+      .catch((err) => { /* istanbul ignore next */
         return { statusCode: 500, body: JSON.stringify(err)};
       })
   }
@@ -19,17 +19,7 @@ class EmployeeMethods{
       .then((user) => {
         return { statusCode: 200, body: JSON.stringify({data: user}) };
       })
-      .catch((err) => {
-        return { statusCode: 500, body: JSON.stringify(err)};
-      })
-  }
-
-  static update(id, data){
-    return User.findOneAndUpdate({_id: id}, data, {runValidators: true, new: true})
-      .then((user) => {
-        return { statusCode:200, body: JSON.stringify({data: user}) };
-      })
-      .catch((err) => {
+      .catch((err) => { /* istanbul ignore next */
         return { statusCode: 500, body: JSON.stringify(err)};
       })
   }
@@ -82,7 +72,7 @@ class EmployeeMethods{
       .then((users) => {
         return { statusCode: 200, body: JSON.stringify(users) }
       })
-      .catch((err) => {
+      .catch((err) => { /* istanbul ignore next */
         return { statusCode: 500, body: JSON.stringify(err)};
       });
   }
@@ -102,7 +92,8 @@ class EmployeeMethods{
           today = today.getUTCFullYear() + '/' + today.getUTCMonth() + '/' + today.getUTCDate();
           let lastTimeLogged = (emp.timeLogged[emp.timeLogged.length-1]) && emp.timeLogged[emp.timeLogged.length-1].arrival || new Date("2000/01/01");
           lastTimeLogged = lastTimeLogged.getUTCFullYear() + '/' + lastTimeLogged.getUTCMonth() + '/' + lastTimeLogged.getUTCDate();
-      
+          
+          /* istanbul ignore if */
           if(today === lastTimeLogged){
             dataEmp.timeLogged = emp.timeLogged[emp.timeLogged.length-1].arrival;
           }else{
@@ -116,7 +107,7 @@ class EmployeeMethods{
         return { statusCode: 200, body: JSON.stringify(output) }
 
       })
-      .catch((err) => {
+      .catch((err) => { /* istanbul ignore next */
         return { statusCode: 500, body: JSON.stringify(err)};
       })
   }

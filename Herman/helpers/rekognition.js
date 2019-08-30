@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const AWS = require('aws-sdk');
 const rekognition = require('../config/config');
 const User = require('../models/user');

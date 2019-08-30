@@ -7,7 +7,7 @@ const mochaPlugin = require('serverless-mocha-plugin');
 const expect = mochaPlugin.chai.expect;
 let wrapped = mochaPlugin.getWrapper('employeeSignIn', '/handler.js', 'employeeSignIn');
 
-describe('employeeSignIn', () => {
+describe('employeeSignIn (succeed)', () => {
   before((done) => {
     done();
   });
@@ -18,6 +18,14 @@ describe('employeeSignIn', () => {
       expect(response.statusCode).to.equal(200);
       expect(response).to.haveOwnProperty('body');
     });
+  });
+
+});
+
+
+describe('employeeSignIn (failed)', () => {
+  before((done) => {
+    done();
   });
 
   it('should response with an error', () => {

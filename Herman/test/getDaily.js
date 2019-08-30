@@ -12,7 +12,7 @@ describe('getDaily', () => {
     done();
   });
 
-  it('implement tests here', () => {
+  it('should return without an error', () => {
     return wrapped.run({}).then((response) => {
       expect(response).to.haveOwnProperty('statusCode');
       expect(response).to.haveOwnProperty('body');
